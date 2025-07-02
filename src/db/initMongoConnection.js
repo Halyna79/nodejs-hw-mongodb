@@ -3,13 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const {
-    MONGODB_USER,
-    MONGODB_PASSWORD,
     MONGODB_DB,
     MONGODB_URL,
 } = process.env;
 
-const uri = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
+const uri = `${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority&appName=Cluster0`;
 
 export const initMongoConnection = async () => {
     try {
