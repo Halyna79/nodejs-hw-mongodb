@@ -1,4 +1,4 @@
-import { getContacts, findContactById, addContact, updateContactById, deleteContactById } from "../services/contacts.js";
+import { getContacts, findContactById, updateContactById, deleteContactById, createContact, updateStatusContact } from "../services/contacts.js";
 
 export const getAllContacts = async (req, res) => {
     const contacts = await getContacts();
@@ -23,9 +23,9 @@ export const getContactById = async (req, res) => {
     });
 };
 
-export const createContact = async (req, res) => {
+export const addContact = async (req, res) => {
     try {
-        const newContact = await addContact(req.body);
+        const newContact = await createContact(req.body);
         res.status(201).json({
             status: 201,
             message: 'Contact successfully created',
@@ -64,6 +64,23 @@ export const deleteContact = async (req, res) => {
             status: 200,
             message: `Successfully deleted contact with id ${contactId}`,
             data: deletedContact,
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+export const updateStatus = async (req, res) => {
+    const { contactId } = req.params;
+    try {
+        const updatedContact = await updateStatusContact(contactId, req.body);
+        if (!updatedContact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+        res.status(200).json({
+            status: 200,
+            message: `Successfully updated status for contact with id ${contactId}`,
+            data: updatedContact,
         });
     } catch (error) {
         res.status(400).json({ message: error.message });
