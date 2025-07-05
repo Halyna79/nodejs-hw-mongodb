@@ -62,7 +62,7 @@ export const updateStatus = async (req, res) => {
     const { contactId } = req.params;
     const { favorite } = req.body;
 
-    if (favorite === 'underfined') {
+    if (favorite === undefined) {
         throw createHttpError(400, 'Missing required field "favorite"');
     }
     const updatedContact = await updateStatusContact(contactId, { favorite });
