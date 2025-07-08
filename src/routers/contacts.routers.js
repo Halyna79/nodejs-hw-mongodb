@@ -2,9 +2,9 @@ import { Router } from 'express';
 import { getContactById, getAllContacts, updateContact, deleteContact, addContact, updateStatus } from '../controllers/contacts.controller.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/valideteBody.js';
-import { createContactSchema } from '../validation/contacts.js';
+import { createContactSchema, updateStatusSchema } from '../validation/contacts.js';
 import { validateId } from '../middlewares/validateId.js';
-import { updateStatusContact } from '../services/contacts.js';
+
 
 const router = Router();
 
@@ -23,7 +23,7 @@ router('/contacts/:contactId')
     .delete(validateId, ctrlWrapper(deleteContact))
     .patch(
         validateId,
-        validateBody(updateStatusContact),
+        validateBody(updateStatusSchema),
         ctrlWrapper(updateStatus),
     );
 
