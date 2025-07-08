@@ -15,7 +15,7 @@ import { validateId } from '../middlewares/validateId.js';
 
 const router = Router();
 router
-    .route('/contacts')
+    .route('/')
     .get(ctrlWrapper(getAllContacts))
     .post(
         validateBody(createContactSchema),
@@ -24,7 +24,7 @@ router
 
 
 router
-    .route('/contacts/:contactId')
+    .route('/:contactId')
     .get(ctrlWrapper(getContactById))
     .put(ctrlWrapper(updateContact))
     .delete(validateId, ctrlWrapper(deleteContact))
