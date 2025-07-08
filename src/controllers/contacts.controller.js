@@ -48,15 +48,13 @@ export const getContactById = async (req, res) => {
 };
 
 export const addContact = async (req, res) => {
-    if (!req.body || Object.keys(req.body).length === 0) {
-        throw createHttpError(400, 'Missing required field');
-    }
-    const newContact = await createContact(req.body);
-    res.status(201).json({
-        status: 201,
-        message: 'Contact successfully created',
-        data: newContact,
-    });
+    const contact = await createContact(req.body);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: contact,
+  });
 };
 
 export const updateContact = async (req, res) => {
