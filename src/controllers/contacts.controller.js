@@ -1,13 +1,34 @@
 import createHttpError from "http-errors";
-import { getContacts, findContactById, updateContactById, deleteContactById, createContact, updateStatusContact } from "../services/contacts.js";
+import {
+    getContacts,
+    findContactById,
+    updateContactById,
+    deleteContactById,
+    createContact,
+    updateStatusContact
+} from "../services/contacts.js";
+import { parsePaginationParams } from "../utils/parsePaginationParams.js";
+import { parseSortParams } from "../utils/parseSortParams.js";
+import { parseQueryParams } from "../utils/parseFilterParams.js";
 
 export const getAllContacts = async (req, res) => {
-    const contacts = await getContacts();
-    res.status(200).json({
-        status: 200,
-        message: 'Successfully found contacts',
-        data: contacts,
+    const { page, perPage } = parsePaginationParams(req.query);
+    const { sortBy, sortOrder } = parseSortParams(req.query);
+    const filter = parseQueryParams(req.query);
+    
+    const contacts = await getContacts({
+        page,
+        perPage,
+        sortBy,
+        sortOrder,
+        filter,
     });
+    const responseBody = {
+        status: 200,
+        message: 'Successfully found contacts!',
+        data: contacts,
+    };
+    res.status(200).json(responseBody);
 };
 
 export const getContactById = async (req, res) => {
@@ -17,11 +38,13 @@ export const getContactById = async (req, res) => {
     if (!contact) {
         throw createHttpError(404, 'Contact not found');
     }
-    res.status(200).json({
+    const responseBody = {
         status: 200,
-        message: `Successfully found contact with id ${contactId}`,
+        message: `Successfully found contact with id ${contactId}!`,
         data: contact,
-    });
+      };
+    
+      res.status(200).json(responseBody);
 };
 
 export const addContact = async (req, res) => {
