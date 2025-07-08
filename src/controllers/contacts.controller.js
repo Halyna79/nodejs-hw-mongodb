@@ -5,17 +5,18 @@ import {
     updateContactById,
     deleteContactById,
     createContact,
-    updateStatusContact
+    updateStatusContact,
+    countContacts
 } from "../services/contacts.js";
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { parseQueryParams } from "../utils/parseFilterParams.js";
+import { calculatePaginationData } from "../utils/calculatePaginationData.js";
 
 export const getAllContacts = async (req, res) => {
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
     const filter = parseQueryParams(req.query);
-    
     const contacts = await getContacts({
         page,
         perPage,
@@ -23,10 +24,20 @@ export const getAllContacts = async (req, res) => {
         sortOrder,
         filter,
     });
+    const totalItems = await countContacts(filter);
+    const paginationData = calculatePaginationData(totalItems, page, perPage);
     const responseBody = {
         status: 200,
         message: 'Successfully found contacts!',
-        data: contacts,
+        data: {
+            contacts,
+            page: paginationData.page,
+            perPage: paginationData.perPage,
+            totalItems: paginationData.totalItems,
+            totalPages: paginationData.totalPages,
+            hasPreviousPage: paginationData.hasPreviousPage,
+            hasNextPage: paginationData.hasNextPage,
+        },
     };
     res.status(200).json(responseBody);
 };

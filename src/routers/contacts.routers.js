@@ -25,8 +25,8 @@ router
 
 router
     .route('/:contactId')
-    .get(ctrlWrapper(getContactById))
-    .put(ctrlWrapper(updateContact))
+    .get(validateId, ctrlWrapper(getContactById))
+    .put(validateId, ctrlWrapper(updateContact))
     .delete(validateId, ctrlWrapper(deleteContact))
     .patch(
         validateId,
