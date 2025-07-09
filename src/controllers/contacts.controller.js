@@ -7,7 +7,7 @@ import {
     createContact,
     updateStatusContact,
     countContacts
-} from "../services/contacts.js";
+} from "../servises/contacts.js";
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { parseQueryParams } from "../utils/parseFilterParams.js";
@@ -30,7 +30,7 @@ export const getAllContacts = async (req, res) => {
         status: 200,
         message: 'Successfully found contacts!',
         data: {
-            contacts,
+            data: contacts,
             page: paginationData.page,
             perPage: paginationData.perPage,
             totalItems: paginationData.totalItems,

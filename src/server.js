@@ -4,6 +4,7 @@ import pino from 'pino-http';
 import contactsRouter from './routers/contacts.routers.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import router from './routers/index.js';
 
 export const setupServer = () => {
     const app = express();
@@ -13,6 +14,8 @@ export const setupServer = () => {
     app.use(express.json());
 
     app.use('/contacts', contactsRouter);
+
+    app.use(router);
 
     app.use(notFoundHandler);
     app.use(errorHandler);
