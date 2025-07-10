@@ -25,7 +25,10 @@ export const authenticate = async (req, res, next) => {
 
   if (!user) return next(createHttpError(401));
 
-  req.user = user;
+    req.user = {
+        ...user.toObject(),
+        sessionId: session._id,
+  };
 
   next();
 };
