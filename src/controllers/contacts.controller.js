@@ -62,13 +62,22 @@ export const getContactById = async (req, res) => {
 
 export const addContact = async (req, res) => {
     const { _id: userId } = req.user;
-    const contact = await createContact(...req.body, userId);
+    const contact = await createContact({...req.body, userId});
 
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully created a contact!',
-    data: contact,
-  });
+    const responseBody = {
+        status: 201,
+        message: 'Successfully created a contact!',
+        data: {
+            data: [contact],
+            page: 1,
+            perPage: 1,
+            totalItems: 1,
+            totalPages: 1,
+            hasPreviousPage: false,
+            hasNextPage: false,
+    },
+  };
+    res.status(201).json(responseBody);
 };
 
 export const updateContact = async (req, res) => {

@@ -37,7 +37,6 @@ export const getContacts = async ({
         countQuery,
     ]);
     const paginationData = calculatePaginationData(count, page, perPage);
-
   return { data: contacts, ...paginationData };
 };
 
