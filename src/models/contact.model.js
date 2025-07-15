@@ -9,6 +9,8 @@ const contactSchema = new Schema(
         phoneNumber: { type: String, required: true },
     
         email: String,
+
+        photo: String,
     
         isFavourite: { type: Boolean, default: false },
     

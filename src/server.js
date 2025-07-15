@@ -7,9 +7,12 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import router from './routers/index.js';
 import cookieParser from 'cookie-parser';
 import usersRouter from './routers/users.routers.js';
+import { UPLOAD_DIR } from './constants/index.js';
 
 export const setupServer = () => {
     const app = express();
+
+    app.use('/uploads', express.static(UPLOAD_DIR));
 
     app.use(cors());
     app.use(pino());
