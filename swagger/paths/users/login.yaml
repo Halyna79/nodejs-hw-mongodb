@@ -1,0 +1,33 @@
+tags:
+  - Users
+summary: Login user
+operationId: loginUser
+description: Login user and return token
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            example: halyna@example.com
+          password:
+            type: string
+            example: secret123
+responses:
+  '200':
+    description: Login successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            token:
+              type: string
+  '401':
+    $ref: ../../components/responses/401.yaml
