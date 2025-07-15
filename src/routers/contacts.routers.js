@@ -1,0 +1,45 @@
+import { Router } from 'express';
+import {
+    getContactById,
+    getAllContacts,
+    updateContact,
+    deleteContact,
+    addContact,
+    updateStatus
+} from '../controllers/contacts.controller.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { createContactSchema, updateStatusSchema } from '../validation/contacts.js';
+import { validateId } from '../middlewares/validateId.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/multer.js';
+
+
+
+const router = Router();
+
+router.use(authenticate);
+
+router
+    .route('/')
+    .get(ctrlWrapper(getAllContacts))
+    .post(
+        upload.single('photo'),
+        validateBody(createContactSchema),
+        ctrlWrapper(addContact),
+    );
+
+
+router
+    .route('/:contactId')
+    .get(validateId, ctrlWrapper(getContactById))
+    .put(validateId, ctrlWrapper(updateContact))
+    .delete(validateId, ctrlWrapper(deleteContact))
+    .patch(
+        validateId,
+        upload.single('photo'),
+        validateBody(updateStatusSchema),
+        ctrlWrapper(updateStatus),
+    );
+
+export default router;
