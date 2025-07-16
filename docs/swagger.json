@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://nodejs-hw-mongodb-8-ntc8.onrender.com"
+      "url": "https://contacts-app-hw7-1wse.onrender.com/"
     },
     {
       "url": "http://localhost:3000"
