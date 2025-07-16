@@ -10,6 +10,10 @@ import { sendEmail } from '../utils/sendMail.js';
 import jwt from 'jsonwebtoken';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import {
+  getFullNameFromGoogleTokenPayload,
+  verifyCode,
+} from '../utils/googleOAuth2.js';
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -166,4 +170,33 @@ export const resetPassword = async (payload) => {
   );
 
   await SessionsCollection.findOneAndDelete({ userId: user._id });
+};
+
+export const loginOrSignupWithGoogle = async (code) => {
+  const loginTicket = await verifyCode(code);
+  const payload = loginTicket.getPayload();
+
+  if (!payload) throw createHttpError(401);
+
+  const email = { payload };
+
+  let user = await UsersCollection.findOne({ email });
+
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    const name = getFullNameFromGoogleTokenPayload(payload);
+
+    user = UsersCollection.create({
+      name,
+      email,
+      password,
+    });
+  }
+
+  const newSession = createSession();
+
+  return await SessionsCollection.create({
+    userId: user._id,
+    ...newSession,
+  });
 };
